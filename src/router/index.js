@@ -7,6 +7,7 @@ import User from '../views/content/user.vue'
 import PageOne from '../views/content/pageOne.vue'
 import PageTwo from '../views/content/pageTwo.vue'
 import Login from '../views/content/login'
+import Other from '../views/content/other.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -38,6 +39,7 @@ const routes = [
         path: '/other',
         name: 'other',
         meta: { title: '其他' },
+        component:Other,
         redirect: '/other/page1',
         children: [
           {

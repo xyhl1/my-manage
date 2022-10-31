@@ -14,9 +14,9 @@
                         <!-- <span class="el-dropdown-link">
                             下拉菜单<i class="el-icon-arrow-down el-icon--right"></i>
                         </span> -->
-                        <img src="@/assets/OIP-C.jpg" alt="" @click="out">
+                        <img src="@/assets/OIP-C.jpg" alt="">
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item icon="el-icon-plus" @click="out">退出</el-dropdown-item>
+                            <el-dropdown-item icon="el-icon-plus" @click.native="out">退出</el-dropdown-item>
                             <el-dropdown-item icon="el-icon-circle-plus">狮子头</el-dropdown-item>
                             <el-dropdown-item icon="el-icon-circle-plus-outline">螺蛳粉</el-dropdown-item>
                             <el-dropdown-item icon="el-icon-check">双皮奶</el-dropdown-item>

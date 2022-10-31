@@ -4,7 +4,6 @@
             background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" :collapse="isCollapse" router>
             <h3>{{isCollapse?"干果":"干果保卫战系统"}}</h3>
             <el-menu-item v-for="item in noChildren" :key="item.name" :index="item.path">
-                <span>{{item}}</span>
                 <i :class="`el-icon-${item.icon}`"></i>
                 <span slot="title">{{item.label}}</span>
             </el-menu-item>
@@ -14,7 +13,6 @@
                     <span slot="title">{{item.label}}</span>
                 </template>
                 <el-menu-item-group v-for="subItem in item.children" :key="subItem.path">
-                    <p>{{subItem}}</p>
                     <el-menu-item :index="subItem.path">{{subItem.name}}</el-menu-item>
                 </el-menu-item-group>
             </el-submenu>

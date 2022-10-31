@@ -8,7 +8,7 @@
                     <el-form-item label="姓名" prop="name">
                         <el-input v-model="form.name"></el-input>
                     </el-form-item>
-                    <el-form-item label="别名">
+                    <el-form-item label="别名" prop="alias">
                         <el-input v-model="form.alias"></el-input>
                     </el-form-item>
                     <el-form-item label="性别" prop="sex">
@@ -20,21 +20,21 @@
                     <el-form-item label="ID" prop="ID">
                         <el-input v-model="form.ID"></el-input>
                     </el-form-item>
-                    <el-form-item label="粉丝数">
+                    <el-form-item label="粉丝数" prop="fansCount">
                         <el-input v-model="form.fansCount"></el-input>
                     </el-form-item>
-                    <el-form-item label="专辑数量">
+                    <el-form-item label="专辑数量" prop="musicSize">
                         <el-input v-model="form.musicSize"></el-input>
                     </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
-                    <el-button @click="reset('form')">取 消</el-button>
+                    <el-button @click="reset()">取 消</el-button>
                     <el-button type="primary" @click="submit('form')">确 定</el-button>
                 </span>
             </el-dialog>
             <div>
                 <el-select v-model="input" clearable placeholder="请选择" filterable>
-                    <el-option v-for="item in tableData" :key="item.ID" :label="item.ID" :value="item.input" @keyup.enter="search">
+                    <el-option label="退出" :value="input" @keyup.enter="search">
                     </el-option>
                 </el-select>
                 <el-button type="primary" icon="el-icon-search" @click="search">搜索</el-button>
@@ -43,7 +43,7 @@
         </div>
 
         <el-card>
-            <el-table :data="tableData.slice((currentPage-1)*8,currentPage*8)" style="width: 100%">
+            <el-table :data="tableData.slice((currentPage - 1) * 8, currentPage * 8)" style="width: 100%">
                 <el-table-column label="姓名" prop="name">
                 </el-table-column>
                 <el-table-column label="别名" prop="alias" show-overflow-tooltip>
@@ -78,6 +78,8 @@ import { getArtistList } from '@/api/index'
 export default {
     data() {
         return {
+            flag: 0,
+            index: 0,
             input: '',
             currentPage: 1,
             dialogVisible: false,
@@ -86,8 +88,8 @@ export default {
                 alias: '',
                 sex: '男',
                 ID: '',
-                fansCount: 0,
-                musicSize: 0
+                fansCount: '',
+                musicSize: ''
             },
             rules: {
                 name: [
@@ -133,25 +135,34 @@ export default {
         handleClose(done) {
             this.$confirm('确认关闭？')
                 .then(_ => {
-                    this.reset('form')
+                   this.reset()
                 })
                 .catch(_ => { });
         },
         submit(form) {
             this.$refs[form].validate((valid) => {
                 if (valid) {
-                    this.dialogVisible = false
+                    if (this.flag == 1) {
+                        this.tableData[this.index] = JSON.parse(JSON.stringify(this.form))
+                    }
+                    else {
+                        this.tableData.unshift(JSON.parse(JSON.stringify(this.form)))
+                    }
+                    this.reset()
                     console.log(this.form, 'form的值');
-                } else {
+                } 
+                else {
                     console.log('error submit!!');
                     return false;
                 }
             })
             console.log(this.form);
         },
-        reset(form) {
+        reset() {
             this.dialogVisible = false
-            this.$refs[form].resetFields()
+            this.$refs['form'].resetFields()
+            this.flag = 0
+            this.index = 0
         },
         handleCurrentChange(val) {
             this.currentPage = val
@@ -159,9 +170,13 @@ export default {
         handleEdit(index, row) {
             this.dialogVisible = true
             row.alias = row.alias.toString()
-            // this.form=JSON.parse(JSON.stringify(row))
-            this.form = row
+            this.$nextTick(()=>{
+                this.form = JSON.parse(JSON.stringify(row))
+            })
+            // this.form = row
             console.log(index, row);
+            this.index = index
+            this.flag = 1
         },
         handleDelete(index, rows) {
             rows.splice(index, 1)
